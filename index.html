@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<head>
+
+    <meta name="google-site-verification" content="NULfWMQ-sOUgITcwluos3xdUvTPqK7VVyQMg1hiM7pg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/imgs/favicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"
+        href="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/imgs/favicons/android-icon-192x192.png">
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <!-- Preload fonts -->
+    <link rel="preload" as="font" href="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/fonts/proxima-nova-bold.woff" type="font/woff"
+        crossorigin="anonymous">
+    <link rel="preload" as="font" href="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/fonts/proxima-nova-regular.woff"
+        type="font/woff" crossorigin="anonymous">
+    <link rel="preload" as="font" href="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/fonts/proxima-nova-light.woff" type="font/woff"
+        crossorigin="anonymous">
+    <link rel="preload" as="font" href="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/fonts/proxima-nova-bold.woff" type="font/woff"
+        crossorigin="anonymous">
+    <link rel="preload" as="font" href="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/fonts/proxima-nova-regular.woff"
+        type="font/woff" crossorigin="anonymous">
+    <link rel="preload" as="font" href="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/fonts/proxima-nova-light.woff" type="font/woff"
+        crossorigin="anonymous">
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+
+    <title>cf-for-k8s – cf push for Kubernetes | Cloud Foundry</title>
+    <meta name="description"
+        content="cf-for-k8s brings the power of cf push to developers by blending the CF developer API with Kubernetes and other open source technologies. Learn more here!" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://www.cloudfoundry.org/technology/cf-for-k8s/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="cf-for-k8s – cf push for Kubernetes | Cloud Foundry" />
+    <meta property="og:description"
+        content="cf-for-k8s brings the power of cf push to developers by blending the CF developer API with Kubernetes and other open source technologies. Learn more here!" />
+    <meta property="og:url" content="https://www.cloudfoundry.org/technology/cf-for-k8s/" />
+    <meta property="og:site_name" content="Cloud Foundry" />
+    <meta property="article:publisher" content="https://www.facebook.com/cloudfoundry" />
+    <meta property="article:modified_time" content="2020-11-17T23:20:17+00:00" />
+    <meta property="og:image"
+        content="https://www.cloudfoundry.org/wp-content/uploads/2017/01/CFF_Logo_vertical_RGB.png" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="863" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@cloudfoundry" />
+    <meta name="twitter:site" content="@cloudfoundry" />
+
+
+    <link rel='dns-prefetch' href='//ajax.googleapis.com' />
+    <link rel='dns-prefetch' href='//s.w.org' />
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js?ver=5.4.1'>
+    </script>
+    <link rel="wlwmanifest" type="application/wlwmanifest+xml"
+        href="https://www.cloudfoundry.org/wp-includes/wlwmanifest.xml" />
+    <link rel='shortlink' href='https://www.cloudfoundry.org/?p=64804' />
+    <script>
+        jQuery(function () {
+            // defer loading of the stylesheet to render the page faster 
+            jQuery('head').append(jQuery(
+                '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@4.7.0/css/fontawesome.min.css" integrity="sha384-zIaWifL2YFF1qaDiAo0JFgsmasocJ/rqu7LKYH8CoBEXqGbb9eO+Xi3s6fQhgFWM" crossorigin="anonymous">'
+                ));
+        });
+    </script>
+</head>
+
+<body
+    class="page-template page-template-page-topics-landing page-template-page-topics-landing-php page page-id-64804 page-child parent-pageid-64797 no-sidebar">
+    <div class="hide-me">
+        <img src="https://www.cloudfoundry.org/wp-content/uploads/2017/01/CFF_Logo_vertical_RGB.png"
+            alt="Cloud Foundry Logo" />
+    </div>
+    <div class="search-form-overlay desktop-show">
+        <form role="search" method="get" id="searchform" class="searchform" action="https://www.cloudfoundry.org/">
+            <div>
+                <label class="screen-reader-text" for="s">Search for:</label><input type="text" value="" name="s" id="s"
+                    placeholder="Search" /><button type="submit" id="btn-blog-search"
+                    class="fa fa-lg fa-search"></button>
+            </div>
+        </form>
+    </div><!-- .search-form -->
+
+    <script>
+        jQuery(function () {
+            var $ = jQuery.noConflict();
+            $('.sub-menu').hover(
+                function () {
+                    $(this).prev('.top-level-link').addClass('child-hovered');
+                },
+                function () {
+                    $(this).prev('.top-level-link').removeClass('child-hovered');
+                }
+            );
+        });
+    </script>
+    <div id="page" class="site">
+        <div class="site-inner">
+            <header id="masthead" class="site-header" role="banner">
+                <div class="topbar-nav">
+                    <nav class="topbar-navigation cf" role="navigation" aria-label="Top Bar Menu">
+                        <a href="https://www.cloudfoundry.org/get-started/">Get Started</a><a
+                            href=" https://www.cloudfoundry.org/membership/">Join the Foundation</a><a
+                            href="https://www.cloudfoundry.org/blog/">Read the Blog</a> <i id="search-toggle"
+                            class="fa fa-search search-btn" aria-hidden="true"></i></button>
+                    </nav><!-- .topbar-navigation -->
+                </div>
+                <div id="2019-header" class="">
+                    <div class="site-header-main inner">
+                        <div class="site-branding left mobile-logo">
+                            <a href="https://www.cloudfoundry.org/" rel="home"><img id="main-logo"
+                                    src="https://www.cloudfoundry.org/wp-content/uploads/2017/01/CFF_Logo_rgb.png"
+                                    alt="Logo" /></a>
+                        </div><!-- .site-branding -->
+
+                        <button id="nav-toggle" class="nav-toggle mobile-show"><i class="fa fa-bars"
+                                aria-hidden="true"></i></button>
+
+                        <div id="site-header-menu" class="site-header-menu desktop-show">
+                            <nav id="site-navigation" class="main-navigation" role="navigation"
+                                aria-label="Primary Menu">
+                                <ul id="menu-main-menu" class="primary-menu">
+                                    <li class="site-branding">
+                                        <a href="https://www.cloudfoundry.org/" rel="home"><img id="main-logo"
+                                                src="https://www.cloudfoundry.org/wp-content/uploads/2017/01/CFF_Logo_rgb.png"
+                                                alt="Logo" /></a>
+                                    </li><!-- .site-branding -->
+                                    <li class="has-children Why">
+                                        <a href="#" class="top-level-link">Why</a>
+                                        <div class="sub-menu cf sub-nav_link_column">
+                                            <div class="sub-menu-col title-col text-center relative">
+                                                <div class="drip-gear-logo text-center"><img loading="lazy"
+                                                        src="https://www.cloudfoundry.org/img/drip-gear.png" /></div>
+                                                <div class="vertical-middle nav-title">
+                                                    <h2>Why</h2>
+                                                </div>
+                                            </div>
+                                            <div class="link-columns cf">
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="" href="https://www.cloudfoundry.org/why-cloud-foundry/" target="">Why Cloud
+                                                        Foundry</a>
+                                                </div>
+                                                <!-- end here -->
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="" href="https://www.cloudfoundry.org/get-started/#gs-training" target="">Resources</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/research/" target="">Industry Research</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/user-stories/" target="">User Stories</a>
+                                                </div>
+                                                <!-- end here -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="has-children Technology">
+                                        <a href="#" class="top-level-link">Technology</a>
+                                        <div class="sub-menu cf sub-nav_link_column">
+                                            <div class="sub-menu-col title-col text-center relative">
+                                                <div class="drip-gear-logo text-center"><img loading="lazy"
+                                                        src="https://www.cloudfoundry.org/img/drip-gear.png" /></div>
+                                                <div class="vertical-middle nav-title">
+                                                    <h2>Technology</h2>
+                                                </div>
+                                            </div>
+                                            <div class="link-columns cf">
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="has-subs" href="https://www.cloudfoundry.org/technology/" target="">Cloud Foundry
+                                                        Technology</a>
+                                                    <div class="child-links">
+                                                        <a href="https://paketo.io/" class="child-link"
+                                                            target="_blank">Paketo</a>
+                                                        <a href="https://www.cloudfoundry.org/technology/cf-for-k8s/" class="child-link"
+                                                            target="">cf-for-k8s</a>
+                                                        <a href="https://www.cloudfoundry.org/technology/open-service-broker-api/"
+                                                            class="child-link" target="">Open Service Broker API</a>
+                                                    </div>
+                                                    <a class="" href="https://www.cloudfoundry.org/working-groups/" target="">Working Groups</a>
+                                                </div>
+                                                <!-- end here -->
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="" href="https://www.cloudfoundry.org/get-started/#gs-documentation"
+                                                        target="">Documentation</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/security/" target="">Security Advisories</a>
+                                                </div>
+                                                <!-- end here -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="has-children Community">
+                                        <a href="#" class="top-level-link">Community</a>
+                                        <div class="sub-menu cf sub-nav_link_column">
+                                            <div class="sub-menu-col title-col text-center relative">
+                                                <div class="drip-gear-logo text-center"><img loading="lazy"
+                                                        src="https://www.cloudfoundry.org/img/drip-gear.png" /></div>
+                                                <div class="vertical-middle nav-title">
+                                                    <h2>Community</h2>
+                                                </div>
+                                            </div>
+                                            <div class="link-columns cf">
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="" href="https://www.cloudfoundry.org/community/" target="">Community Hub</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/community-calendar/" target="">Community
+                                                        Calendar</a>
+                                                </div>
+                                                <!-- end here -->
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="" href="https://www.cloudfoundry.org/code-of-conduct/" target="">Code of Conduct</a>
+                                                </div>
+                                                <!-- end here -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="has-children Events">
+                                        <a href="#" class="top-level-link">Events</a>
+                                        <div class="sub-menu cf sub-nav_link_column">
+                                            <div class="sub-menu-col title-col text-center relative">
+                                                <div class="drip-gear-logo text-center"><img loading="lazy"
+                                                        src="https://www.cloudfoundry.org/img/drip-gear.png" /></div>
+                                                <div class="vertical-middle nav-title">
+                                                    <h2>Events</h2>
+                                                </div>
+                                            </div>
+                                            <div class="link-columns cf">
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="" href="https://www.cloudfoundry.org/events/" target="">Events Home</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/events/summit/" target="">Cloud Foundry
+                                                        Summit</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/webinars/" target="">Webinars</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/hands-on-labs/"
+                                                        target="">Hands-on Labs</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/live-streams/" target="">Live Streams</a>
+                                                </div>
+                                                <!-- end here -->
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="" href="https://www.cloudfoundry.org/events/#events-meetups" target="">Meetups</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/cloudfoundrydays/" target="">Cloud Foundry
+                                                        Days</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/events-archive/" target="">Past Events</a>
+                                                </div>
+                                                <!-- end here -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="has-children Marketplace">
+                                        <a href="#" class="top-level-link">Marketplace</a>
+                                        <div class="sub-menu cf sub-nav_link_column">
+                                            <div class="sub-menu-col title-col text-center relative">
+                                                <div class="drip-gear-logo text-center"><img loading="lazy"
+                                                        src="https://www.cloudfoundry.org/img/drip-gear.png" /></div>
+                                                <div class="vertical-middle nav-title">
+                                                    <h2>Marketplace</h2>
+                                                </div>
+                                            </div>
+                                            <div class="link-columns cf">
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="has-subs" href="https://www.cloudfoundry.org/the-foundry/" target="">The Foundry</a>
+                                                    <div class="child-links">
+                                                        <a href="https://www.cloudfoundry.org/the-foundry/#cert-distros" class="child-link"
+                                                            target="">Certified Distributions</a>
+                                                        <a href="https://www.cloudfoundry.org/the-foundry/#cert-systems-integrators"
+                                                            class="child-link" target="">Certified Systems
+                                                            Integrators</a>
+                                                        <a href="https://www.cloudfoundry.org/the-foundry/#providers" class="child-link"
+                                                            target="">Infrastructure Providers</a>
+                                                        <a href="https://www.cloudfoundry.org/the-foundry/#services" class="child-link"
+                                                            target="">Services & Integrations</a>
+                                                        <a href="https://www.cloudfoundry.org/the-foundry/#training" class="child-link"
+                                                            target="">Authorized Training Partners</a>
+                                                        <a href="https://www.cloudfoundry.org/the-foundry/#integrators" class="child-link"
+                                                            target="">Consulting & Integrators</a>
+                                                    </div>
+                                                </div>
+                                                <!-- end here -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="has-children About">
+                                        <a href="#" class="top-level-link">About</a>
+                                        <div class="sub-menu cf sub-nav_link_column">
+                                            <div class="sub-menu-col title-col text-center relative">
+                                                <div class="drip-gear-logo text-center"><img loading="lazy"
+                                                        src="https://www.cloudfoundry.org/img/drip-gear.png" /></div>
+                                                <div class="vertical-middle nav-title">
+                                                    <h2>About</h2>
+                                                </div>
+                                            </div>
+                                            <div class="link-columns cf">
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="has-subs" href="https://www.cloudfoundry.org/foundation/" target="">The Foundation</a>
+                                                    <div class="child-links">
+                                                        <a href="https://www.cloudfoundry.org/culture/" class="child-link" target="">Culture</a>
+                                                        <a href="https://www.cloudfoundry.org/governing-board/" class="child-link"
+                                                            target="">Governing Board</a>
+                                                        <a href="https://www.cloudfoundry.org/leadership/" class="child-link"
+                                                            target="">Leadership</a>
+                                                        <a href="https://www.cloudfoundry.org/members/" class="child-link" target="">Members</a>
+                                                        <a href="https://www.cloudfoundry.org/governance/" class="child-link"
+                                                            target="">Governance</a>
+                                                        <a href="https://www.cloudfoundry.org/contact/" class="child-link" target="">Contact</a>
+                                                    </div>
+                                                </div>
+                                                <!-- end here -->
+                                                <div class="sub-menu-col sub-nav_link_column">
+                                                    <a class="" href="https://www.cloudfoundry.org/newsroom/" target="">Newsroom</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/cloud-foundry-annual-reports/" target="">Annual
+                                                        Reports</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/newsletter/" target="">Newsletter</a>
+                                                    <a class="" href="https://www.cloudfoundry.org/logo/" target="">Branding</a>
+                                                    <a class="" href="https://store-cloudfoundry.org"
+                                                        target="_blank">Swag Shop</a>
+                                                </div>
+                                                <!-- end here -->
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </nav><!-- .main-navigation -->
+                            <div class="clearfix"></div>
+                        </div><!-- .site-header-menu -->
+                        <div class="clearfix"></div>
+                    </div><!-- .site-header-main -->
+                    <div id="site-header-mobile-menu" class="site-header-mobile-menu">
+                        <div class="search-mobile-container">
+                            <form role="search" method="get" id="searchform" class="searchform"
+                                action="https://www.cloudfoundry.org/">
+                                <div>
+                                    <label class="screen-reader-text" for="s">Search for:</label><input type="text"
+                                        value="" name="s" id="s" placeholder="Search" /><button type="submit"
+                                        id="btn-blog-search" class="fa fa-lg fa-search"></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mob-top-nav text-center hide-me">
+                            <a href="https://www.cloudfoundry.org/get-started/">Get Started</a><a
+                                href=" https://www.cloudfoundry.org/membership/">Join the Foundation</a><a
+                                href="https://www.cloudfoundry.org/blog/">Read the Blog</a> </div>
+                        <nav id="site-mobile-navigation" class="main-mobile-navigation" role="navigation"
+                            aria-label="Primary Menu">
+                            <ul>
+                                <li class="has-children Why">
+                                    <a href="#" class="top-level-link">Why</a>
+                                    <div class="sub-menu cf sub-nav_link_column">
+                                        <div class="sub-menu-col title-col text-center relative">
+                                            <div class="drip-gear-logo text-center"><img src="https://www.cloudfoundry.org/img/drip-gear.png" />
+                                            </div>
+                                            <div class="vertical-middle nav-title">
+                                                <h2>Why</h2>
+                                            </div>
+                                        </div>
+                                        <div class="link-columns cf">
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/why-cloud-foundry/" target="">Why Cloud
+                                                    Foundry</a>
+                                            </div>
+                                            <!-- end here -->
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/get-started/#gs-training"
+                                                    target="">Resources</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/research/" target="">Industry
+                                                    Research</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/user-stories/" target="">User Stories</a>
+                                            </div>
+                                            <!-- end here -->
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="has-children Technology">
+                                    <a href="#" class="top-level-link">Technology</a>
+                                    <div class="sub-menu cf sub-nav_link_column">
+                                        <div class="sub-menu-col title-col text-center relative">
+                                            <div class="drip-gear-logo text-center"><img src="https://www.cloudfoundry.org/img/drip-gear.png" />
+                                            </div>
+                                            <div class="vertical-middle nav-title">
+                                                <h2>Technology</h2>
+                                            </div>
+                                        </div>
+                                        <div class="link-columns cf">
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link has-subs" href="https://www.cloudfoundry.org/technology/" target="">Cloud
+                                                    Foundry Technology</a>
+                                                <div class="child-links">
+                                                    <a href="https://paketo.io/" class="child-link"
+                                                        target="_blank">Paketo</a>
+                                                    <a href="https://www.cloudfoundry.org/technology/cf-for-k8s/" class="child-link"
+                                                        target="">cf-for-k8s</a>
+                                                    <a href="https://www.cloudfoundry.org/technology/open-service-broker-api/" class="child-link"
+                                                        target="">Open Service Broker API</a>
+                                                </div>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/working-groups/" target="">Working
+                                                    Groups</a>
+                                            </div>
+                                            <!-- end here -->
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/get-started/#gs-documentation"
+                                                    target="">Documentation</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/security/" target="">Security
+                                                    Advisories</a>
+                                            </div>
+                                            <!-- end here -->
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="has-children Community">
+                                    <a href="#" class="top-level-link">Community</a>
+                                    <div class="sub-menu cf sub-nav_link_column">
+                                        <div class="sub-menu-col title-col text-center relative">
+                                            <div class="drip-gear-logo text-center"><img src="https://www.cloudfoundry.org/img/drip-gear.png" />
+                                            </div>
+                                            <div class="vertical-middle nav-title">
+                                                <h2>Community</h2>
+                                            </div>
+                                        </div>
+                                        <div class="link-columns cf">
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/community/" target="">Community Hub</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/community-calendar/" target="">Community
+                                                    Calendar</a>
+                                            </div>
+                                            <!-- end here -->
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/code-of-conduct/" target="">Code of
+                                                    Conduct</a>
+                                            </div>
+                                            <!-- end here -->
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="has-children Events">
+                                    <a href="#" class="top-level-link">Events</a>
+                                    <div class="sub-menu cf sub-nav_link_column">
+                                        <div class="sub-menu-col title-col text-center relative">
+                                            <div class="drip-gear-logo text-center"><img src="https://www.cloudfoundry.org/img/drip-gear.png" />
+                                            </div>
+                                            <div class="vertical-middle nav-title">
+                                                <h2>Events</h2>
+                                            </div>
+                                        </div>
+                                        <div class="link-columns cf">
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/events/" target="">Events Home</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/events/summit/" target="">Cloud Foundry
+                                                    Summit</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/webinars/" target="">Webinars</a>
+                                                <a class="parent-link "
+                                                    href="https://www.cloudfoundry.org/hands-on-labs/"
+                                                    target="">Hands-on Labs</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/live-streams/" target="">Live Streams</a>
+                                            </div>
+                                            <!-- end here -->
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/events/#events-meetups"
+                                                    target="">Meetups</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/cloudfoundrydays/" target="">Cloud
+                                                    Foundry Days</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/events-archive/" target="">Past
+                                                    Events</a>
+                                            </div>
+                                            <!-- end here -->
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="has-children Marketplace">
+                                    <a href="#" class="top-level-link">Marketplace</a>
+                                    <div class="sub-menu cf sub-nav_link_column">
+                                        <div class="sub-menu-col title-col text-center relative">
+                                            <div class="drip-gear-logo text-center"><img src="https://www.cloudfoundry.org/img/drip-gear.png" />
+                                            </div>
+                                            <div class="vertical-middle nav-title">
+                                                <h2>Marketplace</h2>
+                                            </div>
+                                        </div>
+                                        <div class="link-columns cf">
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link has-subs" href="https://www.cloudfoundry.org/the-foundry/" target="">The
+                                                    Foundry</a>
+                                                <div class="child-links">
+                                                    <a href="https://www.cloudfoundry.org/the-foundry/#cert-distros" class="child-link"
+                                                        target="">Certified Distributions</a>
+                                                    <a href="https://www.cloudfoundry.org/the-foundry/#cert-systems-integrators" class="child-link"
+                                                        target="">Certified Systems Integrators</a>
+                                                    <a href="https://www.cloudfoundry.org/the-foundry/#providers" class="child-link"
+                                                        target="">Infrastructure Providers</a>
+                                                    <a href="https://www.cloudfoundry.org/the-foundry/#services" class="child-link"
+                                                        target="">Services & Integrations</a>
+                                                    <a href="https://www.cloudfoundry.org/the-foundry/#training" class="child-link"
+                                                        target="">Authorized Training Partners</a>
+                                                    <a href="https://www.cloudfoundry.org/the-foundry/#integrators" class="child-link"
+                                                        target="">Consulting & Integrators</a>
+                                                </div>
+                                            </div>
+                                            <!-- end here -->
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="has-children About">
+                                    <a href="#" class="top-level-link">About</a>
+                                    <div class="sub-menu cf sub-nav_link_column">
+                                        <div class="sub-menu-col title-col text-center relative">
+                                            <div class="drip-gear-logo text-center"><img src="https://www.cloudfoundry.org/img/drip-gear.png" />
+                                            </div>
+                                            <div class="vertical-middle nav-title">
+                                                <h2>About</h2>
+                                            </div>
+                                        </div>
+                                        <div class="link-columns cf">
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link has-subs" href="https://www.cloudfoundry.org/foundation/" target="">The
+                                                    Foundation</a>
+                                                <div class="child-links">
+                                                    <a href="https://www.cloudfoundry.org/culture/" class="child-link" target="">Culture</a>
+                                                    <a href="https://www.cloudfoundry.org/governing-board/" class="child-link" target="">Governing
+                                                        Board</a>
+                                                    <a href="https://www.cloudfoundry.org/leadership/" class="child-link" target="">Leadership</a>
+                                                    <a href="https://www.cloudfoundry.org/members/" class="child-link" target="">Members</a>
+                                                    <a href="https://www.cloudfoundry.org/governance/" class="child-link" target="">Governance</a>
+                                                    <a href="https://www.cloudfoundry.org/contact/" class="child-link" target="">Contact</a>
+                                                </div>
+                                            </div>
+                                            <!-- end here -->
+                                            <div class="sub-menu-col sub-nav_link_column">
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/newsroom/" target="">Newsroom</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/cloud-foundry-annual-reports/"
+                                                    target="">Annual Reports</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/newsletter/" target="">Newsletter</a>
+                                                <a class="parent-link " href="https://www.cloudfoundry.org/logo/" target="">Branding</a>
+                                                <a class="parent-link " href="https://store-cloudfoundry.org"
+                                                    target="_blank">Swag Shop</a>
+                                            </div>
+                                            <!-- end here -->
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav><!-- .main-mobile-navigation -->
+                    </div><!-- .site-header-mobile-menu -->
+                </div> <!-- end 2019 header -->
+
+
+            </header><!-- .site-header -->
+            <div id="content" class="site-content">
+                <div id="primary" class="content-area cf-k8s-page">
+                    <main id="main" class="site-main " role="main">
+
+                        <div class="topics-hero white-text ">
+                            <div id="mk-gear" class="z0">
+                                <div class="gear1"></div>
+                                <div class="gear2"></div>
+                                <div class="gear3"></div>
+                                <div class="gear4"></div>
+                                <div class="gear5"></div>
+                                <div class="gear6"></div>
+                            </div>
+                            <div class="topics-hero-overlay"></div>
+                            <!-- This is hidden for all projects except for cf-for-k8s -->
+                           
+
+
+
+                            <div class="inner narrow relative z1 text-center">
+                                <h1 class="topics-hero-logo"> <img src="images/Korifi-logo-white.png" alt="Cloud Foundry Korifi Logos"></h1>
+                                <h1>Cloud-native transformation for Cloud Foundry workloads</h1>
+                                <p><a id="kubecf-hero-cta" class="blue-btn" href="http://github.com/cloudfoundry/korifi" target="_blank"                                     rel="noopener">Get Going On Github <img class="alignnone size-full wp-image-62535" src="https://www.cloudfoundry.org/wp-content/uploads/github-icon.png" alt="github icon" width="25" height="25" /></a></p>
+                            </div>
+                        </div>
+
+                        <section class="topics-content">
+                            <div class="topics-section full-width-section bg-light-grey">
+                                <div class="inner narrow text-center">
+                                    <h2>What is Korifi?</h2>
+                                    <p>Korifi is an offering built by the Cloud Foundry community. It was born out of the need for internal development platforms to be built over Kubernetes. Korifi’s purpose is to deliver an inherently higher order abstraction over Kubernetes, ultimately enabling developers to focus on building applications. It is purpose-built to serve as a means to deploy applications on Kubernetes while providing automated networking, security, availability, and much more.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="cf">
+                                <div class="inner cf text-center">
+                                    <div class="inline33 half-500">
+                                        <div class="icon-container">
+                                            <img src="images/cloud-gear.png" alt="documentation2x">
+                                        </div>
+                                        <h3>K8s Developer Platform</h3>
+                                    </div>
+                                     <div class="inline33 half-500">
+                                        <div class="icon-container">
+                                            <img src="images/cf-push.png" alt="documentation2x">
+                                        </div>
+                                        <h3>One-command Deploys</h3>
+                                    </div>
+                                    <div class="inline33 half-500">
+                                        <div class="icon-container">
+                                            <img src="images/stack.png" alt="documentation2x">
+                                        </div>
+                                        <h3>Full-scale Operations</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topics-section full-width-section ops-ready bg-cover relative" style="background-image:url('images/ops-ready.jpg')">
+                                <div class="inner narrow relative text-center z1">
+                                    <h2 class="white-text">Dev Complete. Ops Ready</h2>
+                                    <p class="white-text">Korifi integrates into your DevOps toolchain with support for build, test, deploy, and monitoring stages. It includes Kubernetes-native tools such as Envoy and kpack, while also allowing teams to extend their existing CI/CD, logging, and observability tools.  With Korifi, software engineering teams can establish a comprehensive Kubernetes strategy and adopt best practices across development, testing, and deployment phases.
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="topics-section full-width-section bg-light-grey">
+                                <div class="inner narrow text-center py-xl">
+                                    <h2>Designed for Multi-cloud,  Multi-tenant, and Polyglot Needs</h2>
+                                </div>
+                            </div>
+                            <div class="topics-section third-two-thirds-section ">
+                                <div class="inner cf flex flex-align-center no-flex-800 ">
+                                    <div class="w33 full-800 one-third-img  ">
+                                        <img src="images/korifi-1.png" alt="Running clusters">
+                                    </div>
+                                    <div class="w66 full-800 text-block pad-left">
+                                        <p>Using a combination of different public cloud providers for diverse staging needs? Is your infrastructure a hybrid one? Have strict compliance requirements around on-prem servers? Running clusters on the edge? No problem! Korifi can help deploy apps to any permutation of infrastructure types. This allows app developers to deploy on any remote environments with ease. 
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topics-section third-two-thirds-section ">
+                                <div class="inner cf flex flex-align-center no-flex-800 flex-reverse">
+                                    <div class="w33 full-800 one-third-img right ">
+                                        <img src="https://www.cloudfoundry.org/wp-content/uploads/proven-developer-isometric.png"
+                                            alt="smaller-footprint-isometric">
+                                    </div>
+                                    <div class="w66 full-800 text-block pad-right">
+                                        <p>Korifi builds upon Kubernetes Hierarchical Namespaces and uses it to mimic the robust Cloud Foundry paradigm of orgs and spaces. This also extends to the RBAC that is native to the Kubernetes clusters and combines it with that of CF. Together, the two provide a foundation for multi-tenancy that is resilient and secure.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topics-section third-two-thirds-section ">
+                                <div class="inner cf flex flex-align-center no-flex-800 ">
+                                    <div class="w33 full-800 one-third-img  ">
+                                        <img src="https://www.cloudfoundry.org/wp-content/uploads/run-your-app-isometric-1.png"
+                                            alt="run-your-app-isometric">
+                                    </div>
+                                    <div class="w66 full-800 text-block pad-left">
+                                        <p>Korifi preserves the classic Cloud Foundry experience of being able to deploy apps written in any language or framework with a single cf push command. It further enhances the app developer experience by using Paketo buildpacks to deploy apps as OCI-compatible containers. App developers no longer have to wrangle with complex YAML or dockerfiles for containerized deployments to Kubernetes.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="cf blue-dark-blue-grad white-text">
+                            <div class="inner cf text-center">
+                                <h2>Want to get started?</h2>
+
+                                <div class="inline33 half-500 action-icons">
+                                    <p><a href="http://github.com/cloudfoundry/korifi"><img
+                                                src="https://www.cloudfoundry.org/wp-content/uploads/github-outline-1.png"
+                                                alt="github-outline-2"></a></p>
+                                    <p><a id="" class="ghost-cta ghost-cta--yellow"
+                                            href="http://github.com/cloudfoundry/korifi"><span>GitHub Repo</span><i class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+                                </div>
+                                <div class="inline33 half-500 action-icons">
+                                    <p><a
+                                            href="https://join.slack.com/share/enQtMzUyODk5MTg1NzQ3Ny0wZDE5YjNmOGEzMWRjOGQ3M2NkY2ZiYzE1Mzc3NDUwYWNkMmJjMzEwZTZiYjc1OGJlOGI1NzI1MjJjYjM5OWVm"><img
+                                                src="images/slack.png"
+                                                alt="contribute2x"></a></p>
+                                    <p><a id="" class="ghost-cta ghost-cta--yellow"
+                                            href="https://join.slack.com/share/enQtMzUyODk5MTg1NzQ3Ny0wZDE5YjNmOGEzMWRjOGQ3M2NkY2ZiYzE1Mzc3NDUwYWNkMmJjMzEwZTZiYjc1OGJlOGI1NzI1MjJjYjM5OWVm"><span>Slack CHannel</span><i
+                                                class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+                                </div>
+                                <div class="inline33 half-500 action-icons">
+                                    <p><a href="http://twitter.com/cloudfoundry"><img
+                                                src="images/twitter-bird-icon.png"
+                                                alt="documentation2x"></a></p>
+                                    <p><a id="" class="ghost-cta ghost-cta--yellow"
+                                            href="http://twitter.com/cloudfoundry"><span>Twitter</span><i
+                                                class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </main><!-- .site-main -->
+                </div><!-- .content-area -->
+                
+
+
+            </div><!-- .site-content -->
+            <footer id="new-footer">
+                <div class="mid-footer cf ">
+                    <div class="float25 f-logo-holder ">
+                        <div class="footer-logo"><img loading="lazy" src="https://www.cloudfoundry.org/img/CloudFoundaryCorp_vertical_white.png"
+                                alt="Cloud Foundry Logo"></div>
+                    </div>
+                    <div class="float50 f-primary">
+                        <menu>
+                            <div class="menu-2019-footer-members-container">
+                                <ul id="menu-2019-footer-members" class="menu">
+                                    <li id="menu-item-57146"
+                                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-57146">
+                                        <a href="https://www.cloudfoundry.org/dashboard/">Dashboard</a></li>
+                                    <li id="menu-item-57148"
+                                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-57148">
+                                        <a href="https://www.cloudfoundry.org/the-foundry/">Marketplace</a></li>
+                                    <li id="menu-item-57147"
+                                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-57147">
+                                        <a href="https://www.cloudfoundry.org/membership/">Membership</a></li>
+                                </ul>
+                            </div>
+                        </menu>
+                    </div>
+                    <div class="float25 f-secondary">
+                        <menu>
+                            <div class="menu-209-footer-misc-container">
+                                <ul id="menu-209-footer-misc" class="menu">
+                                    <li id="menu-item-57150"
+                                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-57150">
+                                        <a href="https://www.cloudfoundry.org/exports/">Exports</a></li>
+                                    <li id="menu-item-65008"
+                                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-65008">
+                                        <a href="https://www.cloudfoundry.org/search-foundry/">Search Foundry</a></li>
+                                    <li id="menu-item-57152"
+                                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-57152">
+                                        <a href="https://www.cloudfoundry.org/terms-of-service/">Terms of Service</a>
+                                    </li>
+                                    <li id="menu-item-65028"
+                                        class="menu-item menu-item-type-custom menu-item-object-custom menu-item-65028">
+                                        <a target="_blank" rel="noopener noreferrer"
+                                            href="https://www.linuxfoundation.org/privacy">Privacy Policy</a></li>
+                                    <li id="menu-item-65027"
+                                        class="menu-item menu-item-type-custom menu-item-object-custom menu-item-65027">
+                                        <a target="_blank" rel="noopener noreferrer"
+                                            href="https://www.linuxfoundation.org/trademark-usage">Trademark</a></li>
+                                </ul>
+                            </div>
+                        </menu>
+                    </div>
+                </div>
+                <div class="btm-footer cf ">
+                    <div class="social float25 full-800">
+                        <a href="https://twitter.com/cloudfoundry" name="twitter link" target="_blank"
+                            rel="no referer, no opener" class="social-btn"><i class="fa fa-twitter"
+                                aria-hidden="true"></i></a>
+                        <a href="https://www.youtube.com/user/CloudFoundry" name="youtube link" target="_blank"
+                            rel="no referer, no opener" class="social-btn"><i class="fa fa-youtube-play"
+                                aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/company/cloud-foundry" name="facebook link" target="_blank"
+                            rel="no referer, no opener" class="social-btn"><i class="fa fa-linkedin"
+                                aria-hidden="true"></i></a>
+                        <a href="https://www.flickr.com/photos/133185724@N04/albums" target="_blank"
+                            rel="no referer, no opener" name="flickr link" class="social-btn"><i class="fa fa-flickr"
+                                aria-hidden="true"></i></a>
+
+                    </div>
+                    <div class="float75 btm-copyright full-800">
+                        <p>2022 Cloud Foundry, Inc. All rights reserved. Use subject to Privacy Policy and Terms of Use.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+
+        </div><!-- .site-inner -->
+    </div><!-- .site -->
+
+    <div class="cookie-footer"><span>This website uses cookies to offer you a better browsing experience. Find out more
+            about <a href="https://www.cloudfoundry.org/cookies/">how we use cookies and how you can change your settings.</a> <a href="#"
+                id="footer-cookie-notice" data-region="cookieNotice" class="accept">Accept</a>
+        </span></div>
+
+    <script src="https://www.cloudfoundry.org/js/waypoints.min.js"></script>
+    <script src="https://www.cloudfoundry.org/wp-content/themes/cloudfoundry/js/main.2021_05_14.js"></script>
+
+  
+</body>
+
+</html>
